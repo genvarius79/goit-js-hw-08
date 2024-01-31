@@ -1,0 +1,43 @@
+/*++++++++++++  Reset dofault settings  ++++++++++++++++++++++++++++++*/
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+}
+.gallery {
+  display: flex;
+  padding: 24px 156px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  row-gap: 24px;
+  background: #fff;
+}
+.gallery-item {
+  list-style-type: none;
+  width: calc((100% - 2 * 24px) / 3);
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+}
+.gallery-link {
+  text-decoration: none;
+  display: inline-block;
+}
+
+.gallery-link:hover {
+  cursor: zoom-in;
+}
+
+.gallery-image {
+  width: 360px;
+  height: 200px;
+  display: flex;
+}
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
