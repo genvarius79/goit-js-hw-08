@@ -90,7 +90,7 @@ for (let image of images) {
 galleryEl.innerHTML = marcupAll; //вставляємо готову розмітку
 
 // функція створення модалбьного вікна з картинкою бібліотеки BasicLightbox
-function createBasicLightboxInstance(source) {
+function createModal(source) {
   const marcupModal = `<div class="modal">
                           <img src="${source}" width="1112" height="640">
                         </div>`;
@@ -104,6 +104,7 @@ function createBasicLightboxInstance(source) {
     },
     closable: true, //модальне вікно може закриватися при кліку по бекдропу
   });
+  instance.show(); // показ модального вікна
 }
 
 //обробник кліку
@@ -113,8 +114,7 @@ galleryEl.addEventListener("click", (event) => {
     // Перевірка чи користувач клікнув між картинками
     return;
   }
-  createBasicLightboxInstance(event.target.dataset.source); // виклик функції створення та передача картинки що потрібно створити
-  instance.show(); // показ модального вікна
+  createModal(event.target.dataset.source); // виклик функції створення модального вікна та передача картинки що потрібно створити
 });
 
 //Обробник кліку по клавіші ESCAPE
