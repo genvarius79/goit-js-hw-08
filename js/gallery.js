@@ -63,50 +63,63 @@ const images = [
     description: "Lighthouse Coast Sea",
   },
 ];
+let instance; // Глобальна змінна екземпляру класу бібліотеки basicLightbox
+let isShowed = false; // Глобальна змінна що фіксує коли модальне вікно відкрите, або закрите
 
-const galleryEl = document.querySelector(".gallery");
+const galleryEl = document.querySelector(".gallery"); // отримання посилання на ul.gallery
+
+// функція створення розмітки для подальшого відображення елементів на сторінці
 function createMarcup({ preview, original, description }) {
-  const marcup = `
-            <li class="gallery-item">
-                <a class="gallery-link" href="${original}">
-                <img
-                    class="gallery-image"
-                    src="${preview}"
-                    data-source="${original}"
-                    alt="${description}"
-                />
-                </a>
-            </li>
-  `;
+  const marcup = `<li class="gallery-item">
+                    <a class="gallery-link" href="${original}">
+                      <img
+                        class="gallery-image"
+                        src="${preview}"
+                        data-source="${original}"
+                        alt="${description}"
+                      />
+                    </a>
+                  </li>`;
   return marcup;
 }
-let marcup = "";
+let marcupAll = ""; // Глобальна змінна для збереження повної розмітки
 
 for (let image of images) {
-  marcup += createMarcup(image);
+  marcupAll += createMarcup(image); //в циклі створюємо повну розмітку
 }
-galleryEl.innerHTML = marcup;
+galleryEl.innerHTML = marcupAll; //вставляємо готову розмітку
 
+// функція створення модалбьного вікна з картинкою бібліотеки BasicLightbox
+function createBasicLightboxInstance(source) {
+  const marcupModal = `<div class="modal">
+                          <img src="${source}" width="1112" height="640">
+                        </div>`;
+
+  instance = basicLightbox.create(marcupModal, {
+    onShow: (instance) => {
+      isShowed = true;
+    },
+    onClose: (instance) => {
+      isShowed = false;
+    },
+    closable: true, //модальне вікно може закриватися при кліку по бекдропу
+  });
+}
+
+//обробник кліку
 galleryEl.addEventListener("click", (event) => {
   event.preventDefault();
   if (event.target.nodeName !== "IMG") {
-    return; // користувач клікнув між ккартинками
+    // Перевірка чи користувач клікнув між картинками
+    return;
   }
+  createBasicLightboxInstance(event.target.dataset.source); // виклик функції створення та передача картинки що потрібно створити
+  instance.show(); // показ модального вікна
+});
 
-  const instance = basicLightbox.create(
-    `
-  <div class="modal">
-         <img src="${event.target.dataset.source}" width="1112" height="640">
-    </div>
-   
-`
-  );
-
-  instance.show(() => {
-    document.addEventListener("keydown", (event) => {
-      if (event.code === "Escape" && instance.visible()) {
-        instance.close();
-      }
-    });
-  });
+//Обробник кліку по клавіші ESCAPE
+document.addEventListener("keydown", (event) => {
+  if (event.code === "Escape" && isShowed === true) {
+    instance.close();
+  }
 });
